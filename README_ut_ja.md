@@ -21,3 +21,4 @@ AAFaceを表示させるには、Aボタンを押してください。
 
 また、感情毎に眉毛の有無などもカスタマイズしていおり、face-and-color同様、Cボタンを押して表情を変更・確認することができます。
 
+![AAFace](https://user-images.githubusercontent.com/30435134/235902887-58397482-e6e0-422d-8a3b-d7c92fe2e37d.png)
