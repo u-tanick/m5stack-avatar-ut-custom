@@ -1,6 +1,6 @@
 #include <M5Unified.h>
 #include <Avatar.h>
-#include <faces/AAFace.h>
+#include <faces-custom/LaputaFace.h>
 
 using namespace m5avatar;
 
@@ -34,7 +34,7 @@ void setup()
   M5.Lcd.clear();
 
   faces[0] = avatar.getFace();
-  faces[1] = new AAFace();
+  faces[1] = new LaputaFace();
 
   cps[0] = new ColorPalette();
   cps[1] = new ColorPalette();
@@ -47,7 +47,7 @@ void setup()
   cps[3]->set(COLOR_PRIMARY, TFT_RED);
   cps[3]->set(COLOR_BACKGROUND, TFT_PINK);
 
-  avatar.init();
+  avatar.init(8);
   avatar.setColorPalette(*cps[0]);
 }
 

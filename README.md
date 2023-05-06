@@ -1,125 +1,78 @@
-# M5Stack-Avatar
+# M5Stack-Avatar Custom Face
 
-[![Powered By PlatformIO](https://img.shields.io/badge/powered-PlatformIO-brightgreen)](https://platformio.org/)
-[![Build Status](https://travis-ci.com/meganetaaan/m5stack-avatar.svg?branch=master)](https://travis-ci.com/meganetaaan/m5stack-avatar)
+M5Stack-Avatarを元に、オリジナルのカスタムフェイスを作成した版です。
 
-![M5Stack-Avatar](docs/image/avatar.gif)
-
-Video: https://www.youtube.com/watch?v=C1Hj9kfY5qc
+現時点では、カスタムフェイス以外のコードは、M5Stack-Avatarからは変更していません。
+フォーク元のREADMEファイルもこちらに残してあります。
 
 [日本語](README_ja.md)
+[ENGLISH](README_en.md)
 
-## Features
+本リポジトリでは2つのカスタム例を公開しています。
 
-* :neutral_face:     Draw avatar face
-* :smile:            Expression(Happy, Angry, Sad etc.)
-* :smiley_cat:       Customize face
-* :kiss:             Lip sync
-* :art:              Color Palette
-* :arrows_clockwise: Move, Zoom and Rotation
-* :two:              Compatible with M5Stack Core2
+## カスタム例１：AA顔（ショボーン／シャキーン）
 
-## Installation
+実際にカスタマイズして作成した例として、スタックチャンのデフォルトの顔 [・＿・] をベースにして、AA（アスキーアート）でよく見る（よく見ていた？）ショボーン (´・ω・\`) やシャキーン(\`・ω・´)の顔を作成してみました。
 
-### Prerequisites
+＜AAface＞
 
-* USB Driver is installed throwgh [Getting Started: Installing the USB Driver](http://www.m5stack.com/assets/docs/)
-* Any of IDE is set up
-  * This library is confirmed on __Arduino IDE__ and __Platform IO__ for now
+このカスタムフェイス用に実装したコードは下記の２つになります。
 
-### Using Arduino IDE
+- スケッチファイル
+  - /example/aa-face/aa-face.ino
+- カスタムフェイス定義
+  - /src/faces-custom/AAFace.h
 
-* On Arduino IDE, Select "Sketch > Include Library > Manage Libraries..."
-* Search "m5stack avatar"
-* Select "M5Stack_Avatar" from the results then click "Install"
-* The library gets installed
+このカスタマイズでは、目、眉毛、口の顔パーツを新規に定義しています。
+コードの詳細については、リポジトリの上記ファイルをご覧ください。
+ここではカスタムフェイス定義での作成概要を記載します。
 
-### Using Platform IO
+- AAEye
+  - 目のクラス
+  - 標準顔に適用される /src/Eye.cpp の内容をベースにしています。
+  - 標準では、感情表現がAngryおよびSadの場合に目が半月状に加工されますが、今回のカスタマイズではその加工をしないように修正しています。
+- AAEyeblow
+  - 眉毛のクラス
+  - 標準顔に適用される /src/Eyeblow.cpp の内容をベースにしています。
+  - 標準では、感情表現がAngryおよびSadの場合に眉毛が傾くように定義されていますが、今回のカスタマイズではNeutralの場合にシャキーン(\`・ω・´)、Sadの場合にショボーン (´・ω・\`)の形状になるように定義しています。
+  - また、それ以外の感情では眉毛は表示しないように修正しています。
+- AAMouth
+  - 口のクラス
+  - 顔カスタムのサンプルである /src/faces/DogFace.h の内容をベースにしています。
+  - AAの口である　ω　の形状になるように、円や四角を重ね合わせて描画するように記述しています。
 
-* Initialize your Platform IO project
-```sh
-mkdir my-avatar
-cd my-avatar
-platformio init -d . -b m5stack-core-esp32
-```
-* Install the library and its dependency
-```sh
-platformio lib install M5Unified
-platformio lib install M5Stack-Avatar
-```
-* The library gets downloaded from repository to .piolibdeps directory
+## カスタム例２：ラピュタのロボット
 
-## Usage
+もう一つのカスタマイズ例として、天空の城ラピュタに出てくるロボット兵の顔を作ってみました。
 
-```cpp
+＜Laputaface＞
 
-#include <M5Unified.h>
-#include <Avatar.h>
+このカスタムフェイス用に実装したコードは下記の２つになります。
 
-using namespace m5avatar;
+- スケッチファイル
+  - /example/laputa-face/laputa-face.ino
+- カスタムフェイス定義
+  - /src/faces-custom/LaputaFace.h
 
-Avatar avatar;
+このカスタマイズでは、顔の輪郭の作成、目、口の顔パーツの新規定義を行っています。
+眉毛は表示させないようスタックチャンのデフォルトの顔 [・＿・]と同様に高さを0にしています。
+コードの詳細については、リポジトリの上記ファイルをご覧ください。
+ここではカスタムフェイス定義での作成概要を記載します。
 
-void setup()
-{
-  M5.begin();
-  avatar.init(); // start drawing
-}
+- laputa-face.ino
+  - Avatarクラスの初期化の際に、引数を与えて複数色の使用を有効にしています。
+    - avatar.init(8);
+      - 8ビットカラーの使用が可能。もっと多色にしたい場合16,24などに上げることができるようだ。
+    - デフォルトは　avatar.init();　この状態だと2色しか表示できない。
+- LaputaFace.h : LaputaEye
+  - 目のクラス
+  - 感情ごとに、目の色が変わるように設定しています。
+- LaputaFace.h : LaputaMouth
+  - 口のクラス
+  - ロボット兵の輪郭の部分もこのクラスの中で定義しています。
+    - 丸や三角などを組み合わせて輪郭の形状を作りました。
+  - 顔の輪郭部の色は、固定値かつ任意のRGBで指定しています。
+  - 口の機能は顔の中央にある2つの小さい●に持たせたい（しゃべると色が変わるような感じ）と考えていますがまだ実装できてません。とりあえず起こったときだけ赤くしています。
 
-void loop()
-{
-  // avatar's face updates in another thread
-  // so no need to loop-by-loop rendering
-}
-```
-
-### Using LipSync
-
-* setup AquesTalk-ESP32 (http://blog-yama.a-quest.com/?eid=970195).
-  * (For parsing Kainji statement) Copy the dictionary file from above link to the microSD card.
-  * You don't need to copy AquesTalkTTS files. They are included in this library.
-
-* Write below to open avatar mouth according to the audio output.
-
-```cpp
-#include <AquesTalkTTS.h>
-#include <M5Unified.h>
-#include <Avatar.h>
-#include <tasks/LipSync.h>
-
-using namespace m5avatar;
-
-// AquesTalk License Key
-// NULL or wrong value is just ignored
-const char* AQUESTALK_KEY = "XXXX-XXXX-XXXX-XXXX";
-Avatar avatar;
-
-void setup() {
-  int iret;
-  M5.begin();
-  // For Kanji-to-speech mode (requires dictionary file saved on microSD)
-  // iret = TTS.createK(AQUESTALK_KEY);
-  iret = TTS.create(AQUESTALK_KEY);
-  avatar.init();
-  avatar.addTask(lipSync, "lipSync");
-}
-
-void loop() {
-  M5.update();
-  if (M5.BtnA.wasPressed()) {
-    // For Kanji-to-speech mode
-    // TTS.play("こんにちは。", 80);
-    TTS.play("konnichiwa", 80);
-  }
-}
-
-```
-
-### Further usage
-
-see `examples` directory.
-
-### Migration from 0.7.x to 0.8.x
-
-`M5Stack-Avatar` now depends on `M5Unified`, the integrated library for all devices of M5Stack series.
-Since 0.8.0, Sketches with avatar should include `M5Unified.h` instead of `M5Stack.h` or `M5Core2.h`
+この作例では、複数色の使用や顔輪郭の作成などが試すことができて、表現の幅が広がりました。
+（頑張ればガンダムとかも作れるんじゃないか？とか）
