@@ -156,11 +156,15 @@ namespace m5avatar
       uint32_t x = rect.getLeft();
       uint32_t y = rect.getTop();
 
-      // TODO : add speech mode
-      //    float openRatio = ctx->getMouthOpenRatio();
-      //    uint32_t h = minHeight + (maxHeight - minHeight) * openRatio;
-      //    uint32_t w = minWidth + (maxWidth - minWidth) * (1 - openRatio);
-      //  float breath = _min(1.0f, ctx->getBreath());
+      // speech mode
+      float openRatio = ctx->getMouthOpenRatio();
+      uint32_t h = (minHeight + (maxHeight - minHeight) * openRatio)*pow(cos(openRatio), 3.0)*2.5;
+      uint32_t mx = 162;
+      uint32_t my = 120;
+      uint32_t mrx = 13;
+      if (h > minHeight) {
+        spi->fillEllipse(mx, my, mrx, h, TFT_RED);
+      }
 
       uint32_t offset_y = 0;
 
